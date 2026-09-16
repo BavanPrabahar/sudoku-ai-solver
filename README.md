@@ -2,11 +2,28 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch 2.5+](https://img.shields.io/badge/PyTorch-2.5+-ee4c2c.svg)](https://pytorch.org/)
+[![Jupyter Notebook](https://img.shields.io/badge/Notebook-Jupyter%20%2F%20Colab-orange.svg)](sudoku_ai_solver.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A high-performance **Deep Learning (Convolutional Neural Network) & Exact Backtracking Sudoku Solver** built in PyTorch. 
+A high-performance **Deep Learning (Convolutional Neural Network) & Exact Backtracking Sudoku Solver** built in PyTorch.
 
 This repository demonstrates how machines learn abstract spatial constraints, relational reasoning, and logic propagation across an $81$-cell grid without hardcoded game rules.
+
+Available as both modular Python scripts and an interactive, all-in-one Jupyter Notebook: [`sudoku_ai_solver.ipynb`](sudoku_ai_solver.ipynb).
+
+---
+
+## 📊 Verified Online Datasets
+
+These two datasets are standard, verified, and widely used benchmarks on Kaggle:
+
+| Dataset | Size | Format | Direct Verified Link |
+| :--- | :--- | :--- | :--- |
+| **Kaggle 1 Million Sudoku Games** *(Bryan Park)* | 1,000,000 puzzles | CSV (`quizzes,solutions`) | [Kaggle Dataset (Bryan Park)](https://www.kaggle.com/datasets/bryanpark/sudoku) |
+| **Kaggle 3 Million Puzzles with Ratings** *(Grant Radcliffe)* | 3,000,000 puzzles | CSV with difficulty ratings | [Kaggle Dataset (Radcliffe)](https://www.kaggle.com/datasets/radcliffe/3-million-sudoku-puzzles-with-ratings) |
+
+> [!NOTE]
+> A starter dataset of verified puzzles is included out-of-the-box in [`data/sample_sudoku.csv`](data/sample_sudoku.csv) so you can train and test immediately without downloading large external files.
 
 ---
 
@@ -23,26 +40,11 @@ This repository demonstrates how machines learn abstract spatial constraints, re
 
 ---
 
-## 📊 Online Sudoku Datasets & Benchmarks
-
-You can download large-scale public Sudoku datasets to train this network:
-
-| Dataset | Size | Format | Direct Link |
-| :--- | :--- | :--- | :--- |
-| **Kaggle 1 Million Sudoku Games** | 1,000,000 puzzles | CSV (`quizzes,solutions`) | [Kaggle Dataset (Bryan Park)](https://www.kaggle.com/datasets/bryanpark/sudoku) |
-| **Kaggle 3 Million Puzzles with Ratings** | 3,000,000 puzzles | CSV with difficulty ratings | [Kaggle Dataset (Radcliffe)](https://www.kaggle.com/datasets/radcliffe/3-million-sudoku-puzzles-with-ratings) |
-| **Hugging Face Sudoku-1M** | 1,000,000 puzzles | Parquet / CSV | [Hugging Face Hub](https://huggingface.co/datasets/Ritvik19/Sudoku-1M) |
-| **Hugging Face Sudoku-3M** | 3,000,000 puzzles | Parquet / CSV | [Hugging Face Hub](https://huggingface.co/datasets/omarmomen/sudoku-3m) |
-| **Peter Norvig Benchmark Collection** | Hardest & Top95 sets | Plain text | [Norvig's Sudoku Test Suite](https://norvig.com/sudoku.html) |
-
-A starter dataset of verified puzzles is included in [`data/sample_sudoku.csv`](data/sample_sudoku.csv).
-
----
-
 ## 📦 Project Structure
 
 ```
 sudoku-ai-solver/
+├── sudoku_ai_solver.ipynb      # Complete all-in-one interactive Jupyter Notebook
 ├── data/
 │   └── sample_sudoku.csv       # Starter puzzle/solution dataset
 ├── board_utils.py              # One-hot encoding/decoding & constraint validator
@@ -77,38 +79,31 @@ pip install -r requirements.txt
 
 ## 🎯 Usage
 
-### 1. Run the Exact Benchmark Solver
+### Option A: Run the Interactive Jupyter Notebook
+Open [`sudoku_ai_solver.ipynb`](sudoku_ai_solver.ipynb) in Jupyter, VS Code, or Google Colab and run through the cells!
+
+### Option B: Run via Command Line
+
+#### 1. Run the Exact Benchmark Solver
 ```bash
 python backtracking_solver.py
 ```
 
-### 2. Inspect Single-Cell Activation Competition
+#### 2. Inspect Single-Cell Activation Competition
 ```bash
 python demo_activation_solve.py
 ```
 
-### 3. Train the Deep Learning Model
+#### 3. Train the Deep Learning Model
 ```bash
 # Train on sample dataset (or pass your downloaded Kaggle CSV via --csv_path)
 python train.py --csv_path data/sample_sudoku.csv --epochs 10 --batch_size 64 --lr 0.001
 ```
 
-### 4. Solve Any Puzzle with Both Solvers
+#### 4. Solve Any Puzzle with Both Solvers
 ```bash
 python solve.py --puzzle 530070000600195000098000060800060003400803001700020006060000280000419005000080079
 ```
-
----
-
-## 🧠 Model Architecture Specification
-
-$$\text{Input: } (B, 9, 9, 9) \xrightarrow{\text{Conv2D + BN + ReLU} \times 9} \text{Output: } (B, 9, 9, 9)$$
-
-* **Input Channels**: 9 (One-hot binary channels for digits $1..9$).
-* **Hidden Layers**: 7 intermediate blocks with $64$ feature maps each.
-* **Output Logits**: 9 logits per cell $\implies 81 \times 9 = 729$ candidate scores.
-* **Total Parameters**: **265,353** (Lightweight, trains in minutes on GPU).
-* **Loss Function**: Multi-class `nn.CrossEntropyLoss()` evaluated across all 81 cells.
 
 ---
 
