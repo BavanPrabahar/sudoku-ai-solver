@@ -1,111 +1,117 @@
-# 🧩 Deep Learning & Exact Sudoku AI Solver
+# 🧠 AI-Powered Sudoku Solver
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![PyTorch 2.5+](https://img.shields.io/badge/PyTorch-2.5+-ee4c2c.svg)](https://pytorch.org/)
-[![Jupyter Notebook](https://img.shields.io/badge/Notebook-Jupyter%20%2F%20Colab-orange.svg)](sudoku_ai_solver.ipynb)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.5%2B-red?style=flat-square&logo=pytorch)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange?style=flat-square&logo=jupyter)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-A high-performance **Deep Learning (Convolutional Neural Network) & Exact Backtracking Sudoku Solver** built in PyTorch.
+An elegant, high-performance Sudoku Solver combining **Deep Learning (Convolutional Neural Networks)** with an **Exact Backtracking Algorithm**. Built entirely in PyTorch, this repository demonstrates how machines can learn abstract spatial constraints, relational reasoning, and logic propagation without relying on hardcoded game rules.
 
-This repository demonstrates how machines learn abstract spatial constraints, relational reasoning, and logic propagation across an $81$-cell grid without hardcoded game rules.
-
-Available as both modular Python scripts and an interactive, all-in-one Jupyter Notebook: [`sudoku_ai_solver.ipynb`](sudoku_ai_solver.ipynb).
+Whether you're exploring neural networks, looking for a robust backtracking algorithm, or simply wanting to solve complex Sudoku grids instantly, this project provides both modular Python scripts and an interactive Jupyter Notebook environment.
 
 ---
 
-## 📊 Verified Online Datasets
+## ✨ Features
 
-These two datasets are standard, verified, and widely used benchmarks on Kaggle:
-
-| Dataset | Size | Format | Direct Verified Link |
-| :--- | :--- | :--- | :--- |
-| **Kaggle 1 Million Sudoku Games** *(Bryan Park)* | 1,000,000 puzzles | CSV (`quizzes,solutions`) | [Kaggle Dataset (Bryan Park)](https://www.kaggle.com/datasets/bryanpark/sudoku) |
-| **Kaggle 3 Million Puzzles with Ratings** *(Grant Radcliffe)* | 3,000,000 puzzles | CSV with difficulty ratings | [Kaggle Dataset (Radcliffe)](https://www.kaggle.com/datasets/radcliffe/3-million-sudoku-puzzles-with-ratings) |
-
-> [!NOTE]
-> A starter dataset of verified puzzles is included out-of-the-box in [`data/sample_sudoku.csv`](data/sample_sudoku.csv) so you can train and test immediately without downloading large external files.
+- **Dual Solver Architecture**: Includes both a PyTorch-based Deep Learning model (SudokuCNN) and a precise Recursive Backtracking solver.
+- **Categorical One-Hot Encoding**: Avoids numerical bias by representing each cell as a 9-channel binary vector.
+- **Spatial 3x3 Convolutions**: Mirrors Sudoku's inherent subgrid constraints directly within the neural architecture.
+- **Deep Receptive Field**: Utilizes a 9-layer stack to ensure every cell can cross-reference the entire 81-cell board.
+- **High-Speed Inference**: Evaluates all 81 cells simultaneously, yielding solutions in milliseconds.
 
 ---
 
-## 🚀 Key Highlights & Architecture
+## 🗂️ Project Structure
 
-* **Categorical One-Hot Encoding**: Rather than feeding raw numerical scalars $1..9$ (which tricks neural nets into assuming $9$ is $9\times$ larger than $1$), each cell is represented as a 9-channel binary vector $\implies$ input shape $(9 \text{ channels}, 9 \text{ rows}, 9 \text{ cols})$.
-* **Spatial $3 \times 3$ Convolutions**: A $3 \times 3$ kernel directly mirrors the subgrid box constraints of Sudoku.
-* **Why 9 Layers? (Receptive Field Geometry)**:
-  - In Layer 1, each cell only sees its immediate $3 \times 3$ box.
-  - Across successive layers, the receptive field ripples outward.
-  - Because corner cells are **8 steps away** from the opposite corner, a **9-layer stack** is mathematically required to guarantee every cell can cross-reference the entire board.
-* **Simultaneous Parallel Computation**: Unlike sequential backtracking (which checks cell-by-cell), the neural network evaluates **all 81 cells simultaneously in 2 milliseconds**.
-* **Exact Benchmark Baseline**: Includes an exact recursive backtracking solver that achieves 100% ground-truth accuracy in $< 100\text{ ms}$.
-
----
-
-## 📦 Project Structure
-
-```
+```text
 sudoku-ai-solver/
-├── sudoku_ai_solver.ipynb      # Complete all-in-one interactive Jupyter Notebook
-├── data/
-│   └── sample_sudoku.csv       # Starter puzzle/solution dataset
-├── board_utils.py              # One-hot encoding/decoding & constraint validator
-├── backtracking_solver.py      # Ground-truth recursive backtracking solver
-├── model.py                    # PyTorch SudokuCNN architecture (9 layers, 64 hidden dim)
-├── dataset.py                  # PyTorch Dataset and DataLoader for CSVs
-├── train.py                    # Multi-epoch training loop with accuracy metrics
-├── solve.py                    # Inference script comparing DL vs Backtracking
-├── demo_activation_solve.py    # Visual activation calculation walkthrough
-├── requirements.txt            # Minimal dependencies (PyTorch + NumPy)
-└── README.md                   # Complete documentation
+├── 📓 sudoku_ai_solver.ipynb      # Interactive Jupyter Notebook with walkthroughs
+├── 📁 data/
+│   └── sample_sudoku.csv          # Included starter dataset (puzzles & solutions)
+├── ⚙️ board_utils.py              # Utilities for encoding, decoding, and validation
+├── 🔍 backtracking_solver.py      # Ground-truth recursive backtracking implementation
+├── 🧠 model.py                    # PyTorch CNN Architecture (9 layers, 64 hidden dimensions)
+├── 📊 dataset.py                  # PyTorch DataLoader and Dataset for CSV ingestion
+├── 🏋️ train.py                    # Training loop with accuracy and loss tracking
+├── 🚀 solve.py                    # Inference script for benchmarking both solvers
+├── 👁️ demo_activation_solve.py    # Walkthrough of single-cell activation competition
+├── 📝 requirements.txt            # Project dependencies
+└── 📖 README.md                   # You are here
 ```
 
 ---
 
-## 🛠️ Quickstart Installation
+## 🚀 Quickstart
 
+### Prerequisites
+Ensure you have **Python 3.10+** installed on your system.
+
+### 1. Clone the Repository
 ```bash
-# 1. Clone the repository
 git clone https://github.com/BavanPrabahar/sudoku-ai-solver.git
 cd sudoku-ai-solver
+```
 
-# 2. Create and activate a virtual environment
+### 2. Set Up a Virtual Environment (Recommended)
+```bash
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+```
 
-# 3. Install requirements
+### 3. Install Dependencies
+```bash
 pip install -r requirements.txt
 ```
 
 ---
 
-## 🎯 Usage
+## 💻 Usage & Workflows
 
-### Option A: Run the Interactive Jupyter Notebook
-Open [`sudoku_ai_solver.ipynb`](sudoku_ai_solver.ipynb) in Jupyter, VS Code, or Google Colab and run through the cells!
+### 🔬 Option 1: Jupyter Notebook Experience
+The easiest way to explore the project is via the included Jupyter Notebook:
+Open `sudoku_ai_solver.ipynb` in your favorite IDE (VS Code, JupyterLab) or Google Colab to interact with the code cell-by-cell.
 
-### Option B: Run via Command Line
+### ⚡ Option 2: Command-Line Interface
 
-#### 1. Run the Exact Benchmark Solver
+#### Solve a Custom Puzzle
+Pass a string of 81 characters (use `0` for empty cells) to solve it using both the Neural Network and Backtracking algorithms:
+```bash
+python solve.py --puzzle "530070000600195000098000060800060003400803001700020006060000280000419005000080079"
+```
+
+#### Train the Deep Learning Model
+Train the CNN from scratch using the included starter data. You can also supply a larger dataset via the `--csv_path` argument:
+```bash
+python train.py --csv_path data/sample_sudoku.csv --epochs 10 --batch_size 64 --lr 0.001
+```
+
+#### Run the Exact Backtracking Benchmark
+Test the raw speed and accuracy of the recursive algorithmic approach:
 ```bash
 python backtracking_solver.py
 ```
 
-#### 2. Inspect Single-Cell Activation Competition
+#### Visualize Neural Activations
+Inspect how the model makes decisions on a per-cell basis through activation scoring:
 ```bash
 python demo_activation_solve.py
 ```
 
-#### 3. Train the Deep Learning Model
-```bash
-# Train on sample dataset (or pass your downloaded Kaggle CSV via --csv_path)
-python train.py --csv_path data/sample_sudoku.csv --epochs 10 --batch_size 64 --lr 0.001
-```
+---
 
-#### 4. Solve Any Puzzle with Both Solvers
-```bash
-python solve.py --puzzle 530070000600195000098000060800060003400803001700020006060000280000419005000080079
-```
+## 📊 Datasets
+
+For large-scale training, we recommend the following verified Kaggle datasets. A small verified sample is provided in `data/sample_sudoku.csv` to get you started immediately.
+
+| Dataset | Size | Format | Direct Link |
+| :--- | :--- | :--- | :--- |
+| **Kaggle 1M Sudoku Games** | 1,000,000 puzzles | CSV (`quizzes,solutions`) | [View on Kaggle](https://www.kaggle.com/datasets/bryanpark/sudoku) |
+| **Kaggle 3M Rated Puzzles** | 3,000,000 puzzles | CSV (with difficulty ratings) | [View on Kaggle](https://www.kaggle.com/datasets/radcliffe/3-million-sudoku-puzzles-with-ratings) |
 
 ---
 
-## 📜 License
-MIT License. Free for educational, research, and commercial use.
+## 📄 License
+This project is licensed under the **MIT License**. It is free for educational, research, and commercial use. See the source code for more details.
+
+---
+*Maintained by [BavanPrabahar](https://github.com/BavanPrabahar)*
